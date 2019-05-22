@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:1.7-alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/traefik.toml
+      - ./traefik/acme.json:/acme.json
+  portainer:
+    image: portainer/portainer:1.20.2
+    restart: always
+    ports:
+      - "32768"
+    networks:
+      - web
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data portainer/portainer
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.portainer.frontend.rule=Host:portainer.localhost"
+      - "traefik.portainer.port=9000"
+      - "traefik.portainer.protocol=http"
+
+networks:
+  web:
+    external: 
+      name: web
