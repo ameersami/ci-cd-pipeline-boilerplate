@@ -30,6 +30,22 @@ services:
       - "traefik.portainer.frontend.rule=Host:portainer.localhost"
       - "traefik.portainer.port=9000"
       - "traefik.portainer.protocol=http"
+  jenkins:
+    image: jenkins/jenkins:2.180-slim
+    restart: always
+    ports:
+      - "8080"
+    networks:
+      - web
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.jenkins.frontend.rule=Host:jenkins.localhost"
+      - "traefik.jenkins.port=8080"
+      - "traefik.jenkins.protocol=http"
 
 networks:
   web:
