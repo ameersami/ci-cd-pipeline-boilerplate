@@ -75,7 +75,7 @@ pipeline {
           if(existingStackId?.trim()) {
             // Delete the stack
             def stackURL = """
-              https://portainer.<yourdomain>.com/api/stacks/$existingStackId
+              https://portainer.<yourdomain>.com/api/stacks/$existingStackId?endpointId=<endpointid>
             """
             httpRequest acceptType: 'APPLICATION_JSON', validResponseCodes: '204', httpMode: 'DELETE', ignoreSslErrors: true, url: stackURL, customHeaders:[[name:"Authorization", value: env.JWTTOKEN ], [name: "cache-control", value: "no-cache"]]
 
